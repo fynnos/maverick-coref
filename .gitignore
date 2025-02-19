@@ -1,5 +1,7 @@
 # custom
-data/*
+data/cache*
+data/prepare_ontonotes/*
+!data/prepare_ontonotes/minimize.py
 experiments/*
 modelss/*
 .vscode
