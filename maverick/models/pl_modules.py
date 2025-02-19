@@ -163,7 +163,6 @@ class BasePLModule(pl.LightningModule):
             input_ids=batch["input_ids"],
             attention_mask=batch["attention_mask"],
             eos_mask=batch["eos_mask"],
-            eos_indices=batch["eos_indices"],
             tokens=batch["tokens"],
             subtoken_map=batch["subtoken_map"],
             new_token_map=batch["new_token_map"],

@@ -14,13 +14,14 @@ from pytorch_lightning.callbacks import (
     LearningRateMonitor,
 )
 from pytorch_lightning.callbacks.progress.rich_progress import RichProgressBar
-from pytorch_lightning.loggers import WandbLogger
+from pytorch_lightning.loggers import CSVLogger
 from rich.console import Console
 
 from maverick.data.pl_data_modules import BasePLDataModule
 from maverick.models.pl_modules import BasePLModule
 
 torch.set_printoptions(edgeitems=100)
+torch.set_float32_matmul_precision('medium')
 
 
 def train(conf: omegaconf.DictConfig) -> None:
@@ -57,13 +58,13 @@ def train(conf: omegaconf.DictConfig) -> None:
     pl_module: BasePLModule = hydra.utils.instantiate(conf.model.module, _recursive_=False)
 
     # pl_module = BasePLModule.load_from_checkpoint(conf.evaluation.checkpoint, _recursive_=False, map_location="cuda:0")
-    experiment_logger: Optional[WandbLogger] = None
+    experiment_logger: Optional[CSVLogger] = None
     experiment_path: Optional[Path] = None
     if conf.logging.log:
         console.log(f"Instantiating Wandb Logger")
         experiment_logger = hydra.utils.instantiate(conf.logging.wandb_arg)
-        experiment_logger.watch(pl_module, **conf.logging.watch)
-        experiment_path = Path(experiment_logger.experiment.dir)
+        # experiment_logger.watch(pl_module, **conf.logging.watch)
+        experiment_path = Path(experiment_logger.experiment.log_dir)
         # Store the YaML config separately into the wandb dir
         yaml_conf: str = OmegaConf.to_yaml(cfg=conf)
         (experiment_path / "hparams.yaml").write_text(yaml_conf)

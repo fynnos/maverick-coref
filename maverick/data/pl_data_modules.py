@@ -8,6 +8,8 @@ from omegaconf import DictConfig
 from pytorch_lightning.utilities.types import EVAL_DATALOADERS
 from torch.utils.data import DataLoader, Dataset
 
+from maverick.data.dataloader import Maverick_Dataloader
+
 
 class BasePLDataModule(pl.LightningDataModule):
     def __init__(
@@ -36,7 +38,7 @@ class BasePLDataModule(pl.LightningDataModule):
             self.test_dataset = hydra.utils.instantiate(self.dataset.test)
 
     def train_dataloader(self, *args, **kwargs) -> DataLoader:
-        return DataLoader(
+        return Maverick_Dataloader(
             self.train_dataset,
             shuffle=True,
             batch_size=self.batch_sizes.train,
@@ -45,7 +47,7 @@ class BasePLDataModule(pl.LightningDataModule):
         )
 
     def val_dataloader(self, *args, **kwargs) -> DataLoader:
-        return DataLoader(
+        return Maverick_Dataloader(
             self.val_dataset,
             shuffle=False,
             batch_size=self.batch_sizes.val,
@@ -54,7 +56,7 @@ class BasePLDataModule(pl.LightningDataModule):
         )
 
     def test_dataloader(self, *args, **kwargs) -> DataLoader:
-        return DataLoader(
+        return Maverick_Dataloader(
             self.test_dataset,
             shuffle=False,
             batch_size=self.batch_sizes.test,

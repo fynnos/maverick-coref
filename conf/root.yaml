@@ -8,7 +8,7 @@ model_name: "maverick-coref/${model.module.model.huggingface_model_name}"
 defaults:
   - _self_
   - train: default_train
-  - model: mes/deberta-large
+  - model: s2e/deberta-base
   - data: ontonotes
   - evaluation: default_evaluation
   - logging: wandb_logging
